@@ -20,17 +20,24 @@
       <div id="location">
 
       </div>
+      <div id="nolocation">
+
+      </div>
     </div>
   </section>
 </body>
 <script>
-  if ("geolocation" in navigator) {
-    navigator.geolocation.getCurrentPosition(function (position) {
-    GetPosition(position.coords.latitude, position.coords.longitude);
-  });
-  } else{
-    GetPosition("No geolocation", "No geolocation");
+  window.onload = function () {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        GetPosition(position.coords.latitude, position.coords.longitude);
+      });
+    } else {
+      let noloc = document.getElementById("nolocation");
+      noloc.innerHTML = "Cannot access geolocation";
+    }
   }
+
   function GetPosition(latitude, longitude) {
     let loc = document.getElementById("location");
     loc.innerHTML = "Latitude: " + latitude.toString() + " Longitude: " + longitude.toString();

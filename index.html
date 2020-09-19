@@ -24,9 +24,13 @@
   </section>
 </body>
 <script>
-  navigator.geolocation.getCurrentPosition(function (position) {
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(function (position) {
     GetPosition(position.coords.latitude, position.coords.longitude);
   });
+  } else{
+    GetPosition("No geolocation", "No geolocation");
+  }
   function GetPosition(latitude, longitude) {
     let loc = document.getElementById("location");
     loc.innerHTML = "Latitude: " + latitude.toString() + " Longitude: " + longitude.toString();

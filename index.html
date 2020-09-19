@@ -30,6 +30,10 @@
   window.onload = function () {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(function (position) {
+        if (!position.coords.latitude || !position.coords.longitude) {
+          let noloc = document.getElementById("nolocation");
+          noloc.innerHTML = "Cannot access geolocation";
+        }
         GetPosition(position.coords.latitude, position.coords.longitude);
       });
     } else {
@@ -44,5 +48,4 @@
     console.log("Populated stuff");
   }
 </script>
-
 </html>

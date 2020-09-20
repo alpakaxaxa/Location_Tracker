@@ -28,24 +28,36 @@
 </body>
 <script>
   window.onload = function () {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        if (!position.coords.latitude || !position.coords.longitude) {
-          let noloc = document.getElementById("nolocation");
-          noloc.innerHTML = "Cannot access geolocation";
-        }
-        GetPosition(position.coords.latitude, position.coords.longitude);
-      });
-    } else {
-      let noloc = document.getElementById("nolocation");
-      noloc.innerHTML = "Cannot access geolocation";
-    }
-  }
+    var id, target, options;
 
-  function GetPosition(latitude, longitude) {
-    let loc = document.getElementById("location");
-    loc.innerHTML = "Latitude: " + latitude.toString() + " Longitude: " + longitude.toString();
-    console.log("Populated stuff");
+    function success(pos) {
+      var crd = pos.coords;
+
+      if (target.latitude === crd.latitude && target.longitude === crd.longitude) {
+        console.log('Congratulations, you reached the target');
+        navigator.geolocation.clearWatch(id);
+      } else {
+        console.log('Did not find target')
+      }
+    }
+
+    function error(err) {
+      console.warn('ERROR(' + err.code + '): ' + err.message);
+    }
+
+    target = {
+      latitude: 52.520008,
+      longitude: 13.404954
+    };
+
+    options = {
+      enableHighAccuracy: false,
+      timeout: 5000,
+      maximumAge: 0
+    };
+
+    id = navigator.geolocation.watchPosition(success, error, options);
   }
 </script>
+
 </html>

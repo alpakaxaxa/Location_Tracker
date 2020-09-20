@@ -32,7 +32,8 @@
 
     function success(pos) {
       let crd = pos.coords;
-      showPosition(crd);
+      let targetEL = document.getElementById("location");
+      showPosition(crd, targetEL);
       isTargetArea = targetAreaCheck(target, crd, 1.0);
       if (isTargetArea) {
         console.log('Congratulations, you reached the target');

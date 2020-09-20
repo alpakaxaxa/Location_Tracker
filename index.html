@@ -34,7 +34,7 @@
       let crd = pos.coords;
       let targetEL = document.getElementById("location");
       showPosition(crd, targetEL);
-      targetArea = targetAreaCheck(targets, crd, 0.3);
+      targetArea = targetAreaCheck(targets, crd, 0.5);
       if (targetArea != null) {
         console.log('Congratulations, you reached the target');
         navigator.geolocation.clearWatch(id);

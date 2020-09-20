@@ -28,13 +28,15 @@
 </body>
 <script>
   window.onload = function () {
-    var id, target, options;
+    let id, target, options;
 
     function success(pos) {
-      var crd = pos.coords;
-
-      if (target.latitude === crd.latitude && target.longitude === crd.longitude) {
+      let crd = pos.coords;
+      showPosition(crd);
+      isTargetArea = targetAreaCheck(target, crd, 1.0);
+      if (isTargetArea) {
         console.log('Congratulations, you reached the target');
+
         navigator.geolocation.clearWatch(id);
       } else {
         console.log('Did not find target')
@@ -45,9 +47,22 @@
       console.warn('ERROR(' + err.code + '): ' + err.message);
     }
 
+    function showPosition(coords, targetEl) {
+      tagetEl.innerHTML = "Longitude: " + coords.longitude + " Latitude: " + coords.latitude;
+    }
+
+    function targetAreaCheck(crdTarget, crd, crdMargin) {
+      if ((crdTarget.latitude - crdMargin) <= crd.latitude <= (crdTarget.latitude + crdMargin) && 
+          (crdTarget.longitude - crdMargin) <= crd.longitude <= (crd.Target.longitude + crdMargin)) {
+            return true
+      } else {
+        return false
+      }
+    }
+
     target = {
-      latitude: 47.54,
-      longitude: 9.3
+      latitude: 47.0,
+      longitude: 9.0
     };
 
     options = {

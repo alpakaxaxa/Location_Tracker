@@ -20,63 +20,61 @@
       <div id="location">
 
       </div>
-      <div id="nolocation">
-
-      </div>
+      <audio id="audio"></audio>
     </div>
   </section>
 </body>
 <script>
+  const URL = "http://localhost:1337/distinctive-places";
+  const locationMargin = 1.0;
+  const options = {
+    enableHighAccuracy: false,
+    timeout: 5000,
+    maximumAge: 0
+  }
+  let audioTrack;
+  
   window.onload = function () {
-    let id, target, options;
-
-    function success(pos) {
-      let crd = pos.coords;
-      let targetEL = document.getElementById("location");
-      showPosition(crd, targetEL);
-      targetArea = targetAreaCheck(targets, crd, 1);
-      if (targetArea != null) {
-        console.log('Congratulations, you reached the target');
-        navigator.geolocation.clearWatch(id);
-      } else {
-        console.log('Did not find target')
-      }
-    }
-
-    function error(err) {
-      console.warn('ERROR(' + err.code + '): ' + err.message);
-    }
-
-    function showPosition(coords, targetEl) {
-      targetEl.innerHTML = "Longitude: " + coords.longitude + " Latitude: " + coords.latitude;
-    }
-
-    function targetAreaCheck(crdTargets, crd, crdMargin) {
-      crdTargets.forEach(crdTarget => {
-        if ((crdTarget.latitude - crdMargin) <= crd.latitude <= (crdTarget.latitude + crdMargin) &&
-          (crdTarget.longitude - crdMargin) <= crd.longitude <= (crdTarget.longitude + crdMargin)) {
-          return crdTarget
-        } else {
-          return null
-        }
-      })
-    }
-
-    targets = [
-      {
-        targetID: 1,
-        latitude: 47.0,
-        longitude: 9.0
-      }
-    ];
-
-    options = {
-      enableHighAccuracy: false,
-      timeout: 5000,
-      maximumAge: 0
-    };
-
+    let distinctivePlaces = fetchDistinctivePlaces(URL);
     id = navigator.geolocation.watchPosition(success, error, options);
+  }
+
+  function success(pos) {
+    let crd = pos.coords;
+    let targetEL = document.getElementById("location");
+    showPosition(crd, targetEL);
+    targetArea = targetAreaCheck(distinctivePlaces, crd, locationMargin);
+    if (targetArea != null) {
+      console.log('Congratulations, you reached the target');
+      navigator.geolocation.clearWatch(id);
+    } else {
+      console.log('Did not find target')
+    }
+  }
+
+  function error(err) {
+    console.warn('ERROR(' + err.code + '): ' + err.message);
+  }
+
+  function showPosition(coords, targetEl) {
+    targetEl.innerHTML = "Longitude: " + coords.longitude + " Latitude: " + coords.latitude;
+  }
+
+  function targetAreaCheck(crdTargets, crd, crdMargin) {
+    crdTargets.forEach(crdTarget => {
+      if ((crdTarget.Latitude - crdMargin) <= crd.Latitude <= (crdTarget.Latitude + crdMargin) &&
+        (crdTarget.Longitude - crdMargin) <= crd.Longitude <= (crdTarget.Longitude + crdMargin)) {
+        return crdTarget
+      } else {
+        return null
+      }
+    })
+  }
+
+  function fetchDistinctivePlaces(URL) {
+    fetch(URL)
+      .then(response => response.json())
+      .then(data => data);
   }
 </script>
 

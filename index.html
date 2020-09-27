@@ -35,7 +35,8 @@
   let audioTrack;
   
   window.onload = function () {
-    let distinctivePlaces = fetchDistinctivePlaces(URL);
+    let distinctivePlaces = await fetchDistinctivePlaces(URL);
+    console.log(distinctivePlaces);
     id = navigator.geolocation.watchPosition(success, error, options);
   }
 
@@ -72,9 +73,9 @@
   }
 
   function fetchDistinctivePlaces(URL) {
-    fetch(URL)
+    return fetch(URL)
       .then(response => response.json())
-      .then(data => data);
+      .then(data => data)
   }
 </script>
 

@@ -72,7 +72,7 @@
     })
   }
 
-  function fetchDistinctivePlaces(URL) {
+  async function fetchDistinctivePlaces(URL) {
     return fetch(URL)
       .then(response => response.json())
       .then(data => data)

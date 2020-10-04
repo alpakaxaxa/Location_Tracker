@@ -11,19 +11,23 @@
 <body>
   <section class="section">
     <div class="container">
-      <h1 class="title">
-        Hello World
+      <h1 class="title" id="title">
       </h1>
-      <p class="subtitle">
-        My first website with <strong>Bulma</strong>!
+      <p class="subtitle" id="description">
       </p>
-      <div id="location">
-
-      </div>
-      <audio id="audio"></audio>
+      <audio id="audio" class="audioPlayer" controls>
+        Your browser does not support the <code>audio</code> element.
+      </audio>
     </div>
   </section>
 </body>
 <script src="track.js"></script>
+<style>
+  .audioPlayer {
+    display: block;
+    border-radius: 20px;
+    margin: 0 auto;
+  }
+</style>
 
 </html>

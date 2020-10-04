@@ -1,15 +1,17 @@
 window.addEventListener("load", initWatchLocation)
 
 function initWatchLocation() {
+    const APIRootURL = "http://localhost:1337";
     const URL = "http://localhost:1337/distinctive-places";
+    
     const locationMargin = 0.03;
     let audioTrack;
-    let distinctivePlaces = [];
-
-    (async () => {
-        await fetchDistinctivePlaces(URL, distinctivePlaces)
-    })()
-
+    let distinctivePlaces;
+    let oldTargetArea;
+    fetchDistinctivePlaces(URL)
+    .then((data) => {
+        distinctivePlaces = data;
+    })
     const options = {
         enableHighAccuracy: false,
         timeout: 5000,
@@ -20,14 +22,11 @@ function initWatchLocation() {
 
     function success(pos) {
         let crd = pos.coords;
-        let targetEL = document.getElementById("location");
-        showPosition(crd, targetEL);
-        console.log(distinctivePlaces);
-        targetArea = targetAreaCheck(distinctivePlaces[0], crd, locationMargin);
-        if (targetArea != null) {
-            console.log('Congratulations, you reached the target');
+        targetArea = targetAreaCheck(distinctivePlaces, crd, locationMargin);
+        if (targetArea != null && targetArea != oldTargetArea) {
+            populateDistinctivePlace(targetArea)
         } else {
-            console.log('Did not find target')
+            console.log('Continue waiting')
         }
     }
 
@@ -41,20 +40,32 @@ function initWatchLocation() {
 
     function targetAreaCheck(crdTargets, crd, crdMargin) {
         let target;
-        crdTargets.forEach(crdTarget => {
-            if (crdTarget.Latitude - crdMargin <= crd.latitude && crdTarget.Latitude + crdMargin >= crd.latitude &&
-                crdTarget.Longitude - crdMargin <= crd.longitude && crdTarget.Longitude + crdMargin >= crd.longitude) {
-                target = crdTarget
-            }
-        })
-        return target
+        try {
+            crdTargets.forEach(crdTarget => {
+                if (crdTarget.Latitude - crdMargin <= crd.latitude && crdTarget.Latitude + crdMargin >= crd.latitude &&
+                    crdTarget.Longitude - crdMargin <= crd.longitude && crdTarget.Longitude + crdMargin >= crd.longitude) {
+                    target = crdTarget
+                }
+            })
+        } finally {
+            return target
+        }
     }
 
-    async function fetchDistinctivePlaces(URL, fetchTarget) {
+    async function fetchDistinctivePlaces(URL) {
         let response = await fetch(URL);
         let data = await response.json();
-        fetchTarget.push(data);
-        return
+        return await data
     }
 
+    function populateDistinctivePlace(distinctivePlace) {
+        let title = document.getElementById("title");
+        let description = document.getElementById("description");
+        let audio = document.getElementById("audio");
+        //let audio = new Audio(APIRootURL + distinctivePlace.AudioInformation.url)
+        audio.src = APIRootURL + distinctivePlace.AudioInformation.url;
+        title.innerHTML = distinctivePlace.Name;
+        description.innerHTML = distinctivePlace.Description;
+        oldTargetArea = distinctivePlace;
+    }
 }

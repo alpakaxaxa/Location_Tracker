@@ -24,59 +24,6 @@
     </div>
   </section>
 </body>
-<script>
-  const URL = "http://localhost:1337/distinctive-places";
-  const locationMargin = 1.0;
-  const options = {
-    enableHighAccuracy: false,
-    timeout: 5000,
-    maximumAge: 0
-  }
-  let audioTrack;
-  
-  window.onload = function () {
-    let distinctivePlaces = await fetchDistinctivePlaces(URL);
-    console.log(distinctivePlaces);
-    id = navigator.geolocation.watchPosition(success, error, options);
-  }
-
-  function success(pos) {
-    let crd = pos.coords;
-    let targetEL = document.getElementById("location");
-    showPosition(crd, targetEL);
-    targetArea = targetAreaCheck(distinctivePlaces, crd, locationMargin);
-    if (targetArea != null) {
-      console.log('Congratulations, you reached the target');
-      navigator.geolocation.clearWatch(id);
-    } else {
-      console.log('Did not find target')
-    }
-  }
-
-  function error(err) {
-    console.warn('ERROR(' + err.code + '): ' + err.message);
-  }
-
-  function showPosition(coords, targetEl) {
-    targetEl.innerHTML = "Longitude: " + coords.longitude + " Latitude: " + coords.latitude;
-  }
-
-  function targetAreaCheck(crdTargets, crd, crdMargin) {
-    crdTargets.forEach(crdTarget => {
-      if ((crdTarget.Latitude - crdMargin) <= crd.Latitude <= (crdTarget.Latitude + crdMargin) &&
-        (crdTarget.Longitude - crdMargin) <= crd.Longitude <= (crdTarget.Longitude + crdMargin)) {
-        return crdTarget
-      } else {
-        return null
-      }
-    })
-  }
-
-  async function fetchDistinctivePlaces(URL) {
-    return fetch(URL)
-      .then(response => response.json())
-      .then(data => data)
-  }
-</script>
+<script src="track.js"></script>
 
 </html>
